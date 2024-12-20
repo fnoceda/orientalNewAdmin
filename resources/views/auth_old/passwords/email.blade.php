@@ -30,16 +30,16 @@
                                     </div>
                                 @endif
 
-                                <form method="POST" action="{{ url('/resetear/contraseña') }}" class="user">
+                                <form method="POST" action="{{ route('password.email') }}" class="user">
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                    <input type="hidden" name="es_web">
+
                                     <div class="form-group">
-                                        <input type="email" class="form-control form-control-user" name="correo" placeholder="{{ __('E-Mail Address') }}" value="{{ old('email') }}" required>
+                                        <input type="email" class="form-control form-control-user" name="email" placeholder="{{ __('E-Mail Address') }}" value="{{ old('email') }}" required>
                                     </div>
 
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-primary btn-user btn-block">
-                                            Enviar Contraseña
+                                            {{ __('Send Password Reset Link') }}
                                         </button>
                                     </div>
                                 </form>

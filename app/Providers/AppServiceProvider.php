@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Auth;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -12,7 +12,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-    
+
     }
 
     /**
@@ -41,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
                     and m.padre is null
                     order by m.padre, m.orden ";
 
-                session(['sucursalId' => auth()->user()->id]);
+                session(['sucursalId' => Auth::user()->id]);
         $rs = DB::select($sql); $menues = $menu = Array();
         foreach($rs as $r){
             $menu['id'] = $r->id;
@@ -61,9 +61,9 @@ class AppServiceProvider extends ServiceProvider
         join menus_perfiles mp on m.id = mp.menu
         where m.activo = true
         and padre = ".$menu."
-        and mp.perfil = ".Auth()->user()->perfil_id."
+        and mp.perfil = ". Auth::user()->perfil_id."
         order by m.padre, m.orden";
-        session(['sucursalId' => Auth()->user()->id]);
+        session(['sucursalId' =>  Auth::user()->id]);
         $rs = DB::select($sql); $menues =$menu = Array();
         foreach($rs as $r){
             $menu['id'] = $r->id;

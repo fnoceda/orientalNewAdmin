@@ -7,11 +7,15 @@
             <div class="card o-hidden border-0 shadow-lg my-5">
                 <div class="card-body p-0">
                     <div class="row">
-                        <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+
+                        {{--  <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>  --}}
+
+
                         <div class="col-lg-6">
                             <div class="p-5">
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">{{ __('Login') }}</h1>
+
                                 </div>
 
                                 @if ($errors->any())
@@ -71,19 +75,19 @@
 
                                 <hr>
 
-                                @if (Route::has('password.request'))
+                                {{--  @if (Route::has('password.request'))
                                     <div class="text-center">
                                         <a class="small" href="{{ route('password.request') }}">
                                             {{ __('Forgot Password?') }}
                                         </a>
                                     </div>
-                                @endif
+                                @endif  --}}
 
-                                @if (Route::has('register'))
+                                {{--  @if (Route::has('register'))
                                     <div class="text-center">
                                         <a class="small" href="{{ route('register') }}">{{ __('Create an Account!') }}</a>
                                     </div>
-                                @endif
+                                @endif  --}}
                             </div>
                         </div>
                     </div>
