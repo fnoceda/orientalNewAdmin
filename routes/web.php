@@ -16,65 +16,35 @@ use Illuminate\Support\Facades\Route;
 
 
 
-// Route::post('/resetear/contraseña', 'UsersController@passReset');
-// Route::get('/', function () { return view('welcome'); });
-// // Auth::routes();
-// Auth::routes(["register" => false]);
+      
+    Route::post('/resetear/contraseña', 'UsersController@passReset');
+    Route::get('/', function () { return view('welcome'); });
+    // Auth::routes();
+    Auth::routes(["register" => false]);
 
-// Route::get('/profile', 'ProfileController@index')->name('profile');
-// Route::put('/profile', 'ProfileController@update')->name('profile.update');
-// Route::get('/about', function () { return view('about'); })->name('about');
+    Route::get('/profile', 'ProfileController@index')->name('profile');
+    Route::put('/profile', 'ProfileController@update')->name('profile.update');
+    Route::get('/about', function () { return view('about'); })->name('about');
 
-// Route::get('/privacidad', function () { return view('privacidad'); })->name('privacidad');
-// Route::get('/contacto', function () { return view('contacto'); })->name('contacto');
-// Route::post('/contacto', 'ContactoController@send')->name('send');
-// //deslogear
-// Route::get('/resstar', 'HomeController@reestar');
+    Route::get('/privacidad', function () { return view('privacidad'); })->name('privacidad');
+    Route::get('/contacto', function () { return view('contacto'); })->name('contacto');
+    Route::post('/contacto', 'ContactoController@send')->name('send');
+    //deslogear
+    Route::get('/resstar', 'HomeController@reestar');
 
-// Route::get('/corrrre', 'HomeController@correo');
+    Route::get('/corrrre', 'HomeController@correo');
 
-// Route::get('/drop/user', 'HomeController@deleteUser');
-// //*baja de usuario
-// Route::get('/user/baja', 'UsersBajaController@index');
-// Route::post('/user/autenticar', 'UsersBajaController@autenticarUsuario')->name('autenticar');  
-// Route::post('/user/baja/user', 'UsersBajaController@bajaUsuario')->name('baja');  
-
-    //! fuera de middleware para pruebas
-        Route::get('/categorias/articulos', 'ArticulosController@index');
-        Route::get('/categorias/articulos/guardar', 'ArticulosController@guardar_categoria');
-        Route::get('/categoria/articulos/eliminar/{id}', 'ArticulosController@delete');
-        //ordenar categorias
-        Route::get('/categorias/ordenar', 'ArticulosController@indexOrdenar');
-        Route::post('/categorias/buscar', 'ArticulosController@colador');
-        Route::post('/categoria/categorias/ordenar/categorias', 'ArticulosController@ordenarCategorias');
-        //rutas provisorias de apuro
-        Route::post('/categorias/articulos/save', 'ArticulosController@guardar_categoria_momentanea');
-        Route::get('/categorias/articulos/edit', 'ArticulosController@');
-        Route::get('/categorias/articulos/update', 'ArticulosController@');
-        //articulos
-        Route::get('/articulos/listar', 'ArticulosController@articulos');
-        Route::get('/articulos/save/Guardar/', 'ArticulosController@guardarArticulo');
-        Route::post('/imagenes/imagenes/guardar', 'ArticulosController@guardarimagen');
-        Route::get('/imagenes/imagenes/eliminar_imagen', 'ArticulosController@eliminar_imagen');
-        Route::get('/imagenes/imagenes/eliminar', 'ArticulosController@eliminar');
-        Route::post('/imagenes/imagenes/ordenar', 'ArticulosController@ordenar');
-        Route::post('/colores/colors/guardar', 'ArticulosController@ordenarcolores');
-        //dtatable
-        Route::get('/articulos/get/data/', 'ArticulosController@datatable');
-        //articulos filtrar
-        Route::post('/articulos/listar/filtro', 'ArticulosController@filtro_categorias');
-        Route::get('/articulos/descripcion/{id?}', 'ArticulosController@articuloDescripcion')->name('articulo.descripcion');
-        Route::post('/articulos/descripcion/delete', 'ArticulosController@DeleteDescripcion')->name('delete.descripcion');
-        Route::post('/articulo/imagen/descripcion/guardar', 'ArticulosController@guardarImagenDescripcion')->name('safe.description');
-    //! fuera del middleware
-
-
+    Route::get('/drop/user', 'HomeController@deleteUser');
+    //*baja de usuario
+    Route::get('/user/baja', 'UsersBajaController@index');
+    Route::post('/user/autenticar', 'UsersBajaController@autenticarUsuario')->name('autenticar');  
+    Route::post('/user/baja/user', 'UsersBajaController@bajaUsuario')->name('baja');  
 
 
 
 
 Route::group(['middleware' => ['auth','perfil']], function () {
-    // Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/home', 'HomeController@index')->name('home');
     // Route::get('/user/delete', 'ApiController@deleteUser');
 
     // Route::get('/set_language/{lang}','Controller@set_language')->name('set_language');
@@ -107,29 +77,29 @@ Route::group(['middleware' => ['auth','perfil']], function () {
     // Route::resource('/admin/categorias', 'CategoriasController');
     // Route::post('/admin/categorias/agregar', 'CategoriasController@agregarCategorias')->name('categorias.agregar');
     // //Categoria de  Articulos
-    // Route::get('/categorias/articulos', 'ArticulosController@index');
-    // Route::get('/categorias/articulos/guardar', 'ArticulosController@guardar_categoria');
-    // Route::get('/categoria/articulos/eliminar/{id}', 'ArticulosController@delete');
-    // //ordenar categorias
-    // Route::get('/categorias/ordenar', 'ArticulosController@indexOrdenar');
-    // Route::post('/categorias/buscar', 'ArticulosController@colador');
-    // Route::post('/categoria/categorias/ordenar/categorias', 'ArticulosController@ordenarCategorias');
-    // //rutas provisorias de apuro
-    // Route::post('/categorias/articulos/save', 'ArticulosController@guardar_categoria_momentanea');
-    // Route::get('/categorias/articulos/edit', 'ArticulosController@');
-    // Route::get('/categorias/articulos/update', 'ArticulosController@');
-    // //articulos
-    // Route::get('/articulos/listar', 'ArticulosController@articulos');
-    // Route::get('/articulos/save/Guardar/', 'ArticulosController@guardarArticulo');
-    // Route::post('/imagenes/imagenes/guardar', 'ArticulosController@guardarimagen');
-    // Route::get('/imagenes/imagenes/eliminar_imagen', 'ArticulosController@eliminar_imagen');
-    // Route::get('/imagenes/imagenes/eliminar', 'ArticulosController@eliminar');
-    // Route::post('/imagenes/imagenes/ordenar', 'ArticulosController@ordenar');
-    // Route::post('/colores/colors/guardar', 'ArticulosController@ordenarcolores');
-    // //dtatable
-    // Route::get('/articulos/get/data/', 'ArticulosController@datatable');
-    // //articulos filtrar
-    // Route::post('/articulos/listar/filtro', 'ArticulosController@filtro_categorias');
+    Route::get('/categorias/articulos', 'ArticulosController@index');
+    Route::get('/categorias/articulos/guardar', 'ArticulosController@guardar_categoria');
+    Route::get('/categoria/articulos/eliminar/{id}', 'ArticulosController@delete');
+    //ordenar categorias
+    Route::get('/categorias/ordenar', 'ArticulosController@indexOrdenar');
+    Route::post('/categorias/buscar', 'ArticulosController@colador');
+    Route::post('/categoria/categorias/ordenar/categorias', 'ArticulosController@ordenarCategorias');
+    //rutas provisorias de apuro
+    Route::post('/categorias/articulos/save', 'ArticulosController@guardar_categoria_momentanea');
+    Route::get('/categorias/articulos/edit', 'ArticulosController@');
+    Route::get('/categorias/articulos/update', 'ArticulosController@');
+    //articulos
+    Route::get('/articulos/listar', 'ArticulosController@articulos');
+    Route::get('/articulos/save/Guardar/', 'ArticulosController@guardarArticulo');
+    Route::post('/imagenes/imagenes/guardar', 'ArticulosController@guardarimagen');
+    Route::get('/imagenes/imagenes/eliminar_imagen', 'ArticulosController@eliminar_imagen');
+    Route::get('/imagenes/imagenes/eliminar', 'ArticulosController@eliminar');
+    Route::post('/imagenes/imagenes/ordenar', 'ArticulosController@ordenar');
+    Route::post('/colores/colors/guardar', 'ArticulosController@ordenarcolores');
+    //dtatable
+    Route::get('/articulos/get/data/', 'ArticulosController@datatable');
+    //articulos filtrar
+    Route::post('/articulos/listar/filtro', 'ArticulosController@filtro_categorias');
     // //iconos y etiquetas
     // Route::get('/admin/images/{base}', 'iconosEtiqetasController@index');
     // Route::get('/admin/images/create/{tabla}', 'iconosEtiqetasController@create');
@@ -177,9 +147,9 @@ Route::group(['middleware' => ['auth','perfil']], function () {
 
     // //actualizacion abril 2024
     // //articulo_imagen
-    // Route::get('/articulos/descripcion/{id?}', 'ArticulosController@articuloDescripcion')->name('articulo.descripcion');
-    // Route::post('/articulos/descripcion/delete', 'ArticulosController@DeleteDescripcion')->name('delete.descripcion');
-    // Route::post('/articulo/imagen/descripcion/guardar', 'ArticulosController@guardarImagenDescripcion')->name('safe.description');
+    Route::get('/articulos/descripcion/{id?}', 'ArticulosController@articuloDescripcion')->name('articulo.descripcion');
+    Route::post('/articulos/descripcion/delete', 'ArticulosController@DeleteDescripcion')->name('delete.descripcion');
+    Route::post('/articulo/imagen/descripcion/guardar', 'ArticulosController@guardarImagenDescripcion')->name('safe.description');
     // //abms de delivery
     // Route::get('delivery/', 'DeliveryController@index')->name('delivery');
     // Route::get('delivery/edit/{id}', 'DeliveryController@edit')->name('delivery.edit');

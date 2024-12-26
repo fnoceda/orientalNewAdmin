@@ -12,12 +12,14 @@
         "devmarketer/easynav": "^1.0",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^11.0",
+        "laravel/helpers": "^1.7",
         "laravel/legacy-factories": "^1.4",
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.0",
         "symfony/http-client": "^6.1",
         "symfony/mailgun-mailer": "^6.1",
-        "symfony/postmark-mailer": "^6.1"
+        "symfony/postmark-mailer": "^6.1",
+        "yajra/laravel-datatables-oracle": "11.0"
     },
     "require-dev": {
         "spatie/laravel-ignition": "^2.0",

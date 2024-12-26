@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Http\Controllers\UtilidadesController;
-use App\User;
+use App\Models\User as User;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -35,7 +35,9 @@ class PerfilValidate
         if(!isset($ruta_principal->id)){ #significa que son rutas de consulta o de posteo
             return $next($request);
         }else{ #si existe preguntamos si tiene permiso de consultar
-           $permiso= DB::table('menus_perfiles')->where('menu',$ruta_principal->id)->where('perfil',Auth()->user()->perfil_id)->first();
+           $permiso= DB::table('menus_perfiles')->where('menu',$ruta_principal->id)
+        //    ->where('perfil',Auth()->user()->perfil_id)
+           ->first();
            if(isset($permiso->perfil)){
                 return $next($request);
            }else{

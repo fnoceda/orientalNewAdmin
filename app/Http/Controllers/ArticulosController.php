@@ -4,21 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Session;
-use App\Iconos;
-use App\Categorias;
-use App\Articulos;
-use Illuminate\Routing\Redirector;
+use App\Models\Iconos;
+use App\Models\Categorias;
+use App\Models\Articulos;
 use Illuminate\Support\Facades\Auth;
-use Yajra\Datatables\DataTables;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
-use Storage;
-use Whoops\Run;
 use SplFileInfo;
-
+use Yajra\DataTables\Facades\DataTables;
 
 class ArticulosController extends Controller
 {
@@ -250,7 +245,6 @@ class ArticulosController extends Controller
         }
         $medidas = substr($medi, 0 , -1);
       }
-      Log::info($sabores);
     $data = Array(
       'name'=>$r->nombre_articulo,
       'descripcion'=>$r->desc_articulo,
@@ -852,7 +846,6 @@ public function update_momentaneo($r){
 
   //
   $icono=$r->icono_id;
-  Log::info($icono);
   if ($r->padre == "0") {
     Log::info("supuestamente nuevo o de una categotia principal");
     //es uno nuevo
@@ -977,7 +970,6 @@ $rta['cod_retorno'] = 500;  $rta['des_retorno'] = 'hubo un error inesperado'; $r
 
        try {
          $id = DB::table('categorias')->insertGetId($data);
-         Log::info($id);
          if ($id > 0) {
           $rta['cod_retorno'] = 200;
           $rta['des_retorno'] = 'todo ok';
@@ -1098,14 +1090,12 @@ $rta['cod_retorno'] = 500;  $rta['des_retorno'] = 'hubo un error inesperado'; $r
     }else{
       $rta['msg'] = 'error no se pudo cargar la imagen';
     }
-    Log::info($rta);
 
   return $rta;
 }
   public function ordenar(Request $r){
     Log::info(__FUNCTION__); Log::info($r);$rta['cod'] = 500; $rta['msg'] = 'hubo un error al ordenar las imagenes';
     $datos = json_decode($r->data);
-    Log::info($datos);
     foreach ($datos as $key => $value) {
     unset($data);
     $data = Array(
@@ -1145,7 +1135,6 @@ $rta['cod_retorno'] = 500;  $rta['des_retorno'] = 'hubo un error inesperado'; $r
   public function ordenarCategorias(Request $r){
     Log::info(__FUNCTION__); Log::info($r);$rta['cod'] = 500; $rta['msg'] = 'hubo un error al ordenar las categorias';
     $datos = json_decode($r->data);
-    Log::info($datos);
     foreach ($datos as $key => $value) {
     unset($data);
     $data = Array(
