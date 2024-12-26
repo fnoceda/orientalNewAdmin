@@ -906,7 +906,11 @@ $.ajax({
                 editame(rta.id);
                 $("#"+rta.id).remove();
                 filtrar(2);
-                $('#modal-cargar-articulos').modal('hide');
+                $('#modal-cargar-articulos').modal('hide').promise().done(function() {
+                  // Código a ejecutar después de que el modal se haya ocultado
+                  $('.modal-backdrop').remove();
+                  console.log('El modal ha sido ocultado.');
+              });
           }
         }
 

@@ -22,7 +22,6 @@ class PerfilValidate
     {
         if (Auth::check()) {
             $user = User::find(Auth::id()); // Carga fresca desde la base de datos
-            Log::info($user);
             if ($user && $user->perfil == 'cliente') {
                 return redirect('/resstar');
             }
