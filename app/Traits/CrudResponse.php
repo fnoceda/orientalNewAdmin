@@ -401,8 +401,13 @@ protected function describeTable(){
             }
 
         }
-        $keys .= ', created_at, created_by';
-        $vals  .= ', now(), '.Auth::user()->id;
+        $ignorar = ['ciudades'];
+        if (!in_array($this->table, $ignorar)) {
+            $keys .= ', created_at, created_by';
+            $vals  .= ', now(), '.Auth::user()->id;
+            // Lógica para cuando $this->table no está en la lista de $ignorar
+        }
+        
 
         // $tablageneral=explode('_',$this->table);
             // if($tablageneral[0]<>"ge"){//esto es para saber si la tabla es general o de cliente
@@ -424,8 +429,8 @@ protected function describeTable(){
     public function eliminar($id){
         DB::enableQueryLog();
         $updates = '';
-        $campos['deleted_at'] = 'now()';
-        $campos['deleted_by'] = Auth::user()->id;
+        
+            $campos['deleted_at'] = 'now()';
 
         try {
             if ($this->table == 'empresa') {
