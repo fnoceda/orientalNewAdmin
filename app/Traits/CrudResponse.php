@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Auth;
+
 
 trait CrudResponse
 {
@@ -16,7 +18,7 @@ trait CrudResponse
     public $ruteName;
     public $title;
     public $pks;
-    public $fks;
+    public $rute;
 
     public function setTable(Request $r){
 
@@ -29,7 +31,7 @@ trait CrudResponse
         $this->ruteName = 'abms';
         $this->rute = $uri;
         $this->attributes = self::describeTable();
-        $this->pks = self::getPks();
+        $this->pks = $this->getPks();
         $this->fks = self::getFks();
     }
     // Funcion que genera el dataTable desde un ResultSet
@@ -83,9 +85,9 @@ trait CrudResponse
         }
         $sql = ' select id, name from '.$table." where 1 = 1 ";
         if(trim($id) != ''){ $sql .= ' and id = '.$id; }
-        /* if(!empty(auth()->user()->entidad_id)){ //si no tiene entidad es owner
+        /* if(!empty(Auth::user()->entidad_id)){ //si no tiene entidad es owner
             if(substr($table, 0, 3) != 'ge_'){
-                $sql .= " and entidad_id = ".auth()->user()->entidad_id;
+                $sql .= " and entidad_id = ".Auth::user()->entidad_id;
             }
         } */
         $sql .= 'order by 2';
@@ -126,7 +128,7 @@ trait CrudResponse
 
                 $opciones = NULL;
                 if(in_array($column->name, array_column($this->fks, 'campo'))){
-                    $ops = self::getFkOptions( $column->name );
+                    $ops = $this->getFkOptions( $column->name );
                     $opciones[] = Array('id'=>NULL, 'descripcion'=>'Elija una opcion');
                     foreach($ops as $op){
                         $opciones[] = Array('id'=>$op->id, 'descripcion'=>$op->name);
@@ -211,7 +213,7 @@ protected function getFks(){
 public function getPks(){
     // getpks no esta definido
 
-    //$entidad = (auth()->user()->perfil == 1)? '' : " and f.attname <> 'entidad_id' " ;
+    //$entidad = (Auth::user()->perfil == 1)? '' : " and f.attname <> 'entidad_id' " ;
 
     $sql = "
     SELECT
@@ -240,7 +242,7 @@ protected function describeTable(){
     //describe table ahun no esta definido
 
     //Si no es owwenr no es necesario mostrar la entidad
-    //$entidad = (auth()->user()->perfil == 1)? '' : " and f.attname <> 'entidad_id' " ;
+    //$entidad = (Auth::user()->perfil == 1)? '' : " and f.attname <> 'entidad_id' " ;
     $entidad = '';
     $sql = "
         select
@@ -307,11 +309,11 @@ protected function describeTable(){
         $where .= ' and '.$this->table.'.deleted_at is null ';
         $sql = ' select '.$campos.' from '.$tablas.' where 1 = 1 '.$where;
 
-        //$sql .= (!empty(auth()->user()->entidad_id))? 'and '.$this->table.'.entidad_id = '.auth()->user()->entidad_id : '';
+        //$sql .= (!empty(Auth::user()->entidad_id))? 'and '.$this->table.'.entidad_id = '.Auth::user()->entidad_id : '';
 
-        //$sql .= (!empty(auth()->user()->sucursal) and ($bSuc == 1) )? 'and '.$this->table.'.sucursal = '.auth()->user()->sucursal : '';
+        //$sql .= (!empty(Auth::user()->sucursal) and ($bSuc == 1) )? 'and '.$this->table.'.sucursal = '.Auth::user()->sucursal : '';
 
-        //if( $this->table == 'cl_clientes' ){ $sql .= " and ".$this->table.'.id in (select cliente from cl_contratos where sucursal = '.auth()->user()->sucursal.')'; }
+        //if( $this->table == 'cl_clientes' ){ $sql .= " and ".$this->table.'.id in (select cliente from cl_contratos where sucursal = '.Auth::user()->sucursal.')'; }
 
 
 
@@ -373,7 +375,7 @@ protected function describeTable(){
             }
         }
         $campos['updated_at'] = 'now()';
-        $campos['updated_by'] = auth()->user()->id;
+        $campos['updated_by'] = Auth::user()->id;
 
         $updates = DB::table($this->table)
         ->where('id', '=', $id)
@@ -400,13 +402,13 @@ protected function describeTable(){
 
         }
         $keys .= ', created_at, created_by';
-        $vals  .= ', now(), '.auth()->user()->id;
+        $vals  .= ', now(), '.Auth::user()->id;
 
         // $tablageneral=explode('_',$this->table);
             // if($tablageneral[0]<>"ge"){//esto es para saber si la tabla es general o de cliente
-                /* if(auth()->user()->perfil != 1){ //si no es OWNER asignamos la entidad a la que esta logeado
+                /* if(Auth::user()->perfil != 1){ //si no es OWNER asignamos la entidad a la que esta logeado
                     $keys .= ', entidad_id';
-                    $vals .= ', '.auth()->user()->entidad_id;
+                    $vals .= ', '.Auth::user()->entidad_id;
                 } */
             // }
         $sql = 'insert into '.$this->table.'('.$keys.') values ('.$vals.')';
@@ -423,14 +425,14 @@ protected function describeTable(){
         DB::enableQueryLog();
         $updates = '';
         $campos['deleted_at'] = 'now()';
-        $campos['deleted_by'] = auth()->user()->id;
+        $campos['deleted_by'] = Auth::user()->id;
 
         try {
             if ($this->table == 'empresa') {
                 $updates=$this->EliminarTotal($id);
             }else{
                 DB::enableQueryLog();
-                if(auth()->user()->perfil == 1){
+                if(Auth::user()->perfil == 1){
                     //si es OWNER le puede actualizar a quien quiera
                     $updates = DB::table($this->table)
                         ->where('id', '=', $id)
@@ -438,7 +440,7 @@ protected function describeTable(){
                 }else{
                     $updates = DB::table($this->table)
                         ->where('id', '=', $id)
-                        //->where('entidad_id', '=', auth()->user()->entidad_id)
+                        //->where('entidad_id', '=', Auth::user()->entidad_id)
                     ->update($campos);
     
                     //borramos suavemente los registros dependientes es solo para un caso especial
@@ -447,7 +449,7 @@ protected function describeTable(){
                     foreach($deps as $dep){
                         $updates = DB::table($dep->tabla)
                         ->where($dep->campo, '=', $id)
-                        //->where('entidad_id', '=', auth()->user()->entidad_id)
+                        //->where('entidad_id', '=', Auth::user()->entidad_id)
                     ->update($campos);
                     }
     

@@ -49,24 +49,24 @@ Route::group(['middleware' => ['auth','perfil']], function () {
 
     // Route::get('/set_language/{lang}','Controller@set_language')->name('set_language');
     // //rutas de abms
-    // Route::get('/abms/{base}', 'AbmController@index')->name('abms');
-    // Route::get('/abms/{base}/data', 'AbmController@data')->name('abms.data');
-    // Route::get('/abms/{base}/create', 'AbmController@create');
-    // Route::post('/abms/{base}', 'AbmController@store');
-    // Route::get('/abms/{base}/show/{id}', 'AbmController@show')->name('abms.show');
-    // Route::get('/abms/{base}/{id}', 'AbmController@edit');
-    // Route::patch('/abms/{base}/{id}', 'AbmController@update');
-    // Route::delete('/abms/{base}/{id}', 'AbmController@destroy');
+    Route::get('/abms/{base}', 'AbmController@index')->name('abms');
+    Route::get('/abms/{base}/data', 'AbmController@data')->name('abms.data');
+    Route::get('/abms/{base}/create', 'AbmController@create');
+    Route::post('/abms/{base}', 'AbmController@store');
+    Route::get('/abms/{base}/show/{id}', 'AbmController@show')->name('abms.show');
+    Route::get('/abms/{base}/{id}', 'AbmController@edit');
+    Route::patch('/abms/{base}/{id}', 'AbmController@update');
+    Route::delete('/abms/{base}/{id}', 'AbmController@destroy');
     // //abm empresa manual
-    // Route::post('/abms/empresa/guardar', 'AbmController@guardar');
-    // Route::post('/abms/empresa/update', 'AbmController@actualizar_empresa');
-    // //abm manual de colores
-    // Route::get('/abms/colores/colors/index', 'AbmController@colorindex');
-    // Route::get('/abms/colores/colors/create', 'AbmController@colorcreate');
-    // Route::post('/abms/colores/colors/guardar', 'AbmController@colorguardar');
-    // Route::get('/abms/colores/colors/edit/{id}', 'AbmController@coloredit');
-    // Route::post('/abms/colores/colors/update', 'AbmController@colorupdate');
-    // Route::get('/abms/colores/colors/delete/{id}', 'AbmController@deletecolor');
+    Route::post('/abms/empresa/guardar', 'AbmController@guardar');
+    Route::post('/abms/empresa/update', 'AbmController@actualizar_empresa');
+    //abm manual de colores
+    Route::get('/abms/colores/colors/index', 'AbmController@colorindex');
+    Route::get('/abms/colores/colors/create', 'AbmController@colorcreate');
+    Route::post('/abms/colores/colors/guardar', 'AbmController@colorguardar');
+    Route::get('/abms/colores/colors/edit/{id}', 'AbmController@coloredit');
+    Route::post('/abms/colores/colors/update', 'AbmController@colorupdate');
+    Route::get('/abms/colores/colors/delete/{id}', 'AbmController@deletecolor');
 
     // //parametros
     // Route::get('/admin/parametros/', 'parametrosController@index');
