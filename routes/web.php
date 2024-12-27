@@ -69,13 +69,13 @@ Route::group(['middleware' => ['auth','perfil']], function () {
     Route::get('/abms/colores/colors/delete/{id}', 'AbmController@deletecolor');
 
     // //parametros
-    // Route::get('/admin/parametros/', 'parametrosController@index');
-    // Route::get('/admin/parametros/create', 'parametrosController@create');
-    // Route::get('/admin/parametros/edit/{clave}', 'parametrosController@edit');
-    // Route::post('/admin/parametros/update/', 'parametrosController@update');
-    // //Categorias
-    // Route::resource('/admin/categorias', 'CategoriasController');
-    // Route::post('/admin/categorias/agregar', 'CategoriasController@agregarCategorias')->name('categorias.agregar');
+    Route::get('/admin/parametros/', 'parametrosController@index');
+    Route::get('/admin/parametros/create', 'parametrosController@create');
+    Route::get('/admin/parametros/edit/{clave}', 'parametrosController@edit');
+    Route::post('/admin/parametros/update/', 'parametrosController@update');
+    //Categorias
+    Route::resource('/admin/categorias', 'CategoriasController');
+    Route::post('/admin/categorias/agregar', 'CategoriasController@agregarCategorias')->name('categorias.agregar');
     // //Categoria de  Articulos
     Route::get('/categorias/articulos', 'ArticulosController@index');
     Route::get('/categorias/articulos/guardar', 'ArticulosController@guardar_categoria');
