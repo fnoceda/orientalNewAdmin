@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Etiqueta;
-use App\Iconos;
+use App\Models\Etiqueta;
+use App\Models\Iconos;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use SplFileInfo;
@@ -84,7 +85,7 @@ class iconosEtiqetasController extends Controller
                 $array=[
                 'name' => $r->name,  
                 'updated_at' => 'now()', 
-                'updated_by' => auth()->user()->id
+                'updated_by' => Auth::user()->id
                 ];
             }else{
             $respueta=$this->guardarimagen($r->path);
@@ -102,7 +103,7 @@ class iconosEtiqetasController extends Controller
                     'name' => $r->name,
                     'path' => $filename,  
                     'updated_at' => 'now()', 
-                    'updated_by' => auth()->user()->id
+                    'updated_by' => Auth::user()->id
                     ];
             }
             try {
@@ -122,7 +123,7 @@ class iconosEtiqetasController extends Controller
                 'name' => $r->name, 
                 'porcentaje_descuento' => $r->porcentaje_descuento,  
                 'updated_at' => 'now()', 
-                'updated_by' => auth()->user()->id
+                'updated_by' => Auth::user()->id
                 ];
             }else{
                 $respueta=$this->guardarimagen($r->path);
@@ -141,7 +142,7 @@ class iconosEtiqetasController extends Controller
                     'path' => $filename, 
                     'porcentaje_descuento' => $r->porcentaje_descuento,  
                     'updated_at' => 'now()', 
-                    'updated_by' => auth()->user()->id
+                    'updated_by' => Auth::user()->id
                     ];
                 }
                 try {
@@ -199,7 +200,7 @@ class iconosEtiqetasController extends Controller
                     $respueta=$this->guardarimagen($r->path);
                     $filename=$respueta['data'];
                 try {
-                    Iconos::create(['name' => $r->name,'path' => $filename, 'created_by' => auth()->user()->id,'created_at' =>'now()']);
+                    Iconos::create(['name' => $r->name,'path' => $filename, 'created_by' => Auth::user()->id,'created_at' =>'now()']);
                     return redirect('/admin/images/'.($r->tabla_name))->with('status', 'Icono cargado con exito');
                     // return back()->with('status', 'Icono cargado con exito');
                 } catch (\Throwable $th) {
@@ -212,7 +213,7 @@ class iconosEtiqetasController extends Controller
                     $respueta=$this->guardarimagen($r->path);
                     $filename=$respueta['data'];
                     try {
-                        Etiqueta::create(['name' => $r->name,'porcentaje_descuento' => $r->porcentaje_descuento,'path' => $filename, 'created_by' => auth()->user()->id,'created_at' =>'now()']);
+                        Etiqueta::create(['name' => $r->name,'porcentaje_descuento' => $r->porcentaje_descuento,'path' => $filename, 'created_by' => Auth::user()->id,'created_at' =>'now()']);
                         return redirect('/admin/images/'.($r->tabla_name))->with('status', 'Icono cargado con exito');
                         // return back()->with('status', 'Etiqueta cargada con exito');
                     } catch (\Throwable $th) {

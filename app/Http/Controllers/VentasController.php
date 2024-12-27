@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Ventas_detalles;
+use App\Models\Ventas_detalles;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -96,7 +97,7 @@ public function destroy(Request $r){
         ->where("id", '=', $r->id)
         ->update([
           'deleted_at'=> 'now()',
-          'deleted_by'=> auth()->user()->id,
+          'deleted_by'=> Auth::user()->id,
           ]);
         if ($updated > 0) {
            return back()->with('status', 'Eliminado con exito');
@@ -179,7 +180,7 @@ public function cambiar_estado(Request $r){
           ->update([
             'estado'=>$r->estado,
             'updated_at'=> 'now()',
-            'updated_by'=> auth()->user()->id,
+            'updated_by'=> Auth::user()->id,
           ]);
           if ($updated > 0) {
               $rta['cod_retorno'] = 200;

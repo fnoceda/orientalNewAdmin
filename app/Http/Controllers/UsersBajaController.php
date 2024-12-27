@@ -59,7 +59,7 @@ class UsersBajaController extends Controller
                 ]); 
                 return view('admin.baja.index')->with('success','Usuario dado de baja Correctamente');
             }else{
-                return view('admin.baja.index')->withErrors("Error no autorizado");
+                return redirect()->route('baja')->withErrors('Error.!, no autorizado');
             }
     } catch (\Throwable $th) {
         Log::info("aqui ocurrio un error".$th->getMessage());

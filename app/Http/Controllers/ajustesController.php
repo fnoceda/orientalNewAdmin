@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\Console\Input\Input;
@@ -67,7 +68,7 @@ class ajustesController extends Controller
         $error_vacio=null;
         $error_negativo=null;
         $error_letra=null;
-        $succes =null;
+        $succes =[];
         $traidos=$r->articulos;
         // dd($traidos);
         foreach($r->articulos as $art){
@@ -105,7 +106,7 @@ class ajustesController extends Controller
                 'cantidad_anterior'=>( $succes[$ajustes]['viejo']),
                 'cantidad_nueva' => ($succes[$ajustes]['actual']),   
                 'created_at'=> 'now()',
-                'created_by'=> auth()->user()->id
+                'created_by'=> Auth::user()->id
             ); 
                 DB::table('ajustes')->insert($data);
                 Log::info(DB::getQueryLog());
@@ -122,7 +123,7 @@ class ajustesController extends Controller
                 ->update([
                     'existencia' => $succes[$articulo]['actual'], 
                     'updated_at' => 'now()', 
-                    'updated_by' => auth()->user()->id
+                    'updated_by' => Auth::user()->id
                 ]);
                 Log::info(DB::getQueryLog());
             }

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\TagsArticulos;
+use App\Models\TagsArticulos;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Yajra\Datatables\DataTables;
@@ -32,7 +33,7 @@ class TagsController extends Controller
 
             $data = DB::table('tags')->insert([
                 'name' => $r->name,
-                'created_by'=>auth()->user()->id,
+                'created_by'=>Auth::user()->id,
                 'created_at'=>now(),
             ]);
             $rta['cod'] = 200;
@@ -75,7 +76,7 @@ class TagsController extends Controller
                 ->where('id', $r->id)
                 ->update([
                     'name' => $r->name,
-                    'updated_by'=>auth()->user()->id,
+                    'updated_by'=>Auth::user()->id,
                     'updated_at'=>now(),
 
                 ]);

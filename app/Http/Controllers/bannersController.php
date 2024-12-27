@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use SplFileInfo;
@@ -95,7 +96,7 @@ class bannersController extends Controller
             'es_activo'=>$activo,
             'parametro'=>$r->parametro,
             'created_at'=> 'now()',
-            'created_by'=> auth()->user()->id,
+            'created_by'=> Auth::user()->id,
            );
         try {
             $id = DB::table('banners')->insert($data);
@@ -177,7 +178,7 @@ class bannersController extends Controller
                         'parametro' => $r->parametro,
                         'es_activo'=>$activo,
                         'updated_at' => 'now()',
-                        'updated_by' => auth()->user()->id
+                        'updated_by' => Auth::user()->id
             ];
         }else{
             $respueta=$this->guardarimagen($r->path);
@@ -199,7 +200,7 @@ class bannersController extends Controller
                         'es_activo'=>$activo,
                         'parametro' => $r->parametro,
                         'updated_at' => 'now()',
-                        'updated_by' => auth()->user()->id
+                        'updated_by' => Auth::user()->id
             ];
         }
             try {

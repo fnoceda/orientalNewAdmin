@@ -68,7 +68,7 @@ class combosController extends Controller
                 'articulo_id'=>intval( $stock->articulo),
                 'cantidad' => intval ($stock->cantidad),   
                 'created_at'=> 'now()',
-                'created_by'=> auth()->user()->id
+                'created_by'=> Auth::user()->id
             ); 
             DB::table('combo_articulos')->insert($data);
             Log::info(DB::getQueryLog());
@@ -93,7 +93,7 @@ class combosController extends Controller
             //puede que tenga o no detalles asi que no se si se puede eliminar
             DB::table('articulos')->where('id', '=', $r->id)->update([
               'deleted_at'=>now(),
-              'deleted_by'=>Auth()->user()->id,
+              'deleted_by'=>Auth::user()->id,
             ]);
             $dos=DB::table('articulos')->where('id', '=', $r->id)->delete();
             $rta['cod']=200; $rta['msg']="Los Detalles y el articulo fueron eliminados";

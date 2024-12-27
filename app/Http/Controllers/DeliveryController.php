@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Yajra\Datatables\DataTables;
@@ -32,7 +33,7 @@ class DeliveryController extends Controller
             $data = DB::table('coste_delivery')->insert([
                 'kilometros' => $r->kilometros,
                 'importe' => $r->importe,
-                'created_by'=>auth()->user()->id,
+                'created_by'=>Auth::user()->id,
                 'created_at'=>now(),
             ]);
             $rta['cod'] = 200;
@@ -77,7 +78,7 @@ class DeliveryController extends Controller
                 ->update([
                     'kilometros' => $r->kilometros,
                     'importe' => $r->importe,
-                    'updated_by'=>auth()->user()->id,
+                    'updated_by'=>Auth::user()->id,
                     'updated_at'=>now(),
 
                 ]);

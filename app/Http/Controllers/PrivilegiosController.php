@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-
+use Illuminate\Support\Facades\Auth;
 
 class PrivilegiosController extends Controller
 {
@@ -70,7 +70,7 @@ class PrivilegiosController extends Controller
              $insert = DB::table('menus_perfiles')->insert(
                  Array(  'perfil' => $datos[1], 
                          'menu' => $datos[2], 
-                         'created_by' => auth()->user()->id, 
+                         'created_by' => Auth::user()->id, 
                          'created_at' => 'now()')
              );
              Log::info(DB::getQueryLog());
@@ -86,7 +86,7 @@ class PrivilegiosController extends Controller
          $datos = explode('_', $request->opcion);
          $where['perfil'] = $datos[1]; 
          $where['menu']   = $datos[2]; 
-         $campos['deleted_by'] = auth()->user()->id;
+         $campos['deleted_by'] = Auth::user()->id;
          $campos['deleted_at'] = 'now()';
  
          $updates = DB::table('menus_perfiles')

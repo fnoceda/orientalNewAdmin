@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
@@ -75,7 +76,7 @@ class UsersController extends Controller
         if ($validator->fails()) {
             $response['message'] = 'Por favor complete todos los campos ' . $validator->errors();
         }else{
-            if (auth()->user()->perfil !='admin') {
+            if (Auth::user()->perfil !='admin') {
                 $response['message']='Usuario inexistente en la web';
                 return $response;
             }
@@ -95,7 +96,7 @@ class UsersController extends Controller
                     'perfil_id' => $request->perfil_id,
                     'empresa_id' => $request->empresa_id ?? null,
                     'created_at'=>'now()',
-                    'created_by'=> auth()->user()->id
+                    'created_by'=> Auth::user()->id
                 );
                 $insertId = DB::table('users')->insertGetId($datos);
                 $response['code'] = 200; $response['message'] = 'Usuario insertado exitosamente';
@@ -140,7 +141,7 @@ class UsersController extends Controller
             
             $response['message'] = 'Por favor complete todos los campos ' . $validator->errors();
         }else{
-            if (auth()->user()->perfil !='admin') {
+            if (Auth::user()->perfil !='admin') {
                 $response['message']='Usuario inexistente en la web';
                 return $response;
             }
@@ -223,15 +224,15 @@ class UsersController extends Controller
         if ($validator->fails()) {
             return back()->withInput($r->all())->withErrors('Por favor complete todos los campos ' . $validator->errors());
         }else{
-            if (auth()->user()->perfil !='admin') {
+            if (Auth::user()->perfil !='admin') {
                 return back()->withInput($r->all())->withErrors("Usuario inexistente en la web");
             }
             try {
-                    if (Hash::check($r->current_password,auth()->user()->password)) {
+                    if (Hash::check($r->current_password,Auth::user()->password)) {
                                 $query = "
                                 select id from users where email=:email and id=:id limit 1
                                 ";
-                                $data = DB::select(DB::raw($query), array('id' =>$r->id_usuario,'email' =>auth()->user()->email));
+                                $data = DB::select(DB::raw($query), array('id' =>$r->id_usuario,'email' =>Auth::user()->email));
                                 DB::table('users')
                                 ->where('id', '=', $data[0]->id)
                                 ->update([

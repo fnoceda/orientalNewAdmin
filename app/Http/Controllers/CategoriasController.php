@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
-use App\Categorias;
-use App\Iconos;
+use App\Models\Categorias;
+use App\Models\Iconos;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
@@ -39,7 +40,7 @@ class CategoriasController extends Controller
         $imageUpload = new Iconos();
         $imageUpload->name = $nameonly;
         $imageUpload->path = $avatar;
-        $imageUpload->created_by = auth()->user()->id;
+        $imageUpload->created_by = Auth::user()->id;
         $imageUpload->save();
 
         $icon = Iconos::All();
@@ -51,7 +52,7 @@ class CategoriasController extends Controller
           $categoria->icono_id = ($icon->last()->id);
           $categoria->orden = 1;
           $categoria->activo = 1;
-          $categoria->created_by = auth()->user()->id;
+          $categoria->created_by = Auth::user()->id;
           $categoria->save();
         }
         else
@@ -63,7 +64,7 @@ class CategoriasController extends Controller
           $categoria->padre = $request->categoria_subcategoria;
           $categoria->orden = 1;
           $categoria->activo = 1;
-          $categoria->created_by = auth()->user()->id;
+          $categoria->created_by = Auth::user()->id;
           $categoria->save();
         }
 
