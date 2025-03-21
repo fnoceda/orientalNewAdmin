@@ -22,7 +22,7 @@ class ApiController extends Controller
         Log::info(__FILE__.'/'.__FUNCTION__);
         $rta['cod'] = 0;
         $rta['reg'] = 0;
-        $query = "select id, name  from ciudades order by name";
+        $query = "select id, name,updated_at  from ciudades order by name";
         $data = DB::select(DB::raw($query));
         return response()->json($data);
     }
@@ -33,7 +33,7 @@ class ApiController extends Controller
         Log::info(__FILE__.'/'.__FUNCTION__);
         $rta['cod'] = 0;
         $rta['reg'] = 0;
-        $query = "select id, ciudad_id, name  from barrios order by 1";
+        $query = "select id, ciudad_id, name,updated_at  from barrios order by 1";
         $data = DB::select(DB::raw($query));
         return response()->json($data);
     }
