@@ -222,7 +222,7 @@ class ApiController extends Controller
                             c.id as ciudad_id, c.name as ciudad_name,
                             b.id as barrio_id, b.name as barrio_name,
                             --( now() + interval '24h' ) as expires_in,
-                             (u.access_time + interval '6 months') AS expires_in
+                             (u.access_time + interval '6 months') AS expires_in,
                             user_access_id
                             from users u
                             left join ciudades c on  u.ciudad_id = c.id
@@ -324,7 +324,7 @@ class ApiController extends Controller
                         $query = " select u.id, u.ruc,  u.name, u.email as correo, u.telefono, u.direccion, u.access_token as token, u.latitud, u.longitud,
                                     c.id as ciudad_id, c.name as ciudad_name, b.id as barrio_id, b.name as barrio_name, 
                                     --( now() + interval '24h' ) as expires_in,
-                                     (u.access_time + interval '6 months') AS expires_in 
+                                     (u.access_time + interval '6 months') AS expires_in, 
                                      user_access_id
                                     from users u
                                     left join ciudades c on  u.ciudad_id = c.id
@@ -757,7 +757,7 @@ class ApiController extends Controller
         Log::info(__FILE__.'/'.__FUNCTION__);
         $rta['cod'] = 0;
 
-            $query = " select c.id, initcap(c.name) as name, c.name_co as nameco, c.padre, i.path as icono, c.path as foto, categoriaprincipal(c.id) as principal, c.orden
+            $query = " select c.id, initcap(c.name) as name, c.name_co as nameco, c.padre, i.path as icono, c.path as foto, categoriaprincipal(c.id) as principal,c.updated_at, c.orden
                         from categorias c left join iconos i on c.icono_id = i.id
                         where c.activo = true
                         order by orden
@@ -770,6 +770,122 @@ class ApiController extends Controller
         return response()->json($rta);
 
     }
+
+    public function get6Categorias(){
+    $rta['cod'] = 500; $rta['msg'] = 'Ocurrio un error al realizar la consulta'; $rta['reg'] = 0; $rta['dat'] = NULL;
+    try {
+        DB::enableQueryLog();
+        Log::info(__FILE__ . '/' . __FUNCTION__);
+
+        // Obtener las categorías principales usando el Query Builder
+        $categorias = DB::table('categorias as c')
+            ->select(DB::raw('DISTINCT c.id, INITCAP(c.name) AS name, c.name_co AS nameco, 
+                              c.padre, i.path AS icono, c.path AS foto, c.updated_at, c.orden'))
+            ->leftJoin('iconos as i', 'c.icono_id', '=', 'i.id')
+            ->where('c.activo', true)
+            ->whereIn('c.id', function($query) {
+                $query->select(DB::raw('DISTINCT padre'))
+                      ->from('categorias')
+                      ->whereIn('id', function($query) {
+                          $query->select(DB::raw('DISTINCT categoria_id'))
+                                ->from('articulos');
+                      })
+                      ->whereNotNull('padre');
+            })
+            ->orderBy('c.orden')
+            ->get();
+        if ($categorias->isEmpty()) {
+            return response()->json(['error' => 'No hay categorías disponibles'], 404);
+        }
+
+        $datosFinales = [];
+
+        foreach ($categorias as $categoria) {
+            // Obtener los 6 primeros artículos de la categoría
+            $articulos = DB::table('articulos as a')
+                ->select(DB::raw('a.id, a.categoria_id AS categoriaid, a.empresa_id AS empresaid, a.etiqueta_id AS etiquetaid, 
+                                  INITCAP(a.name) AS name, INITCAP(c.name) AS categoria, INITCAP(e.name) AS empresa, 
+                                  x.path AS etiqueta, a.descripcion, a.presentacion, a.name_co AS nameco, 
+                                  a.descripcion_co AS descripcionco, a.valoracion, a.observaciones, 
+                                  a.observaciones_co AS observacionesco, a.existencia, a.es_combo AS escombo, a.por_gramo, 
+                                  a.unidad_de_medida AS unidadmedida, a.timer_precio AS timerprecio, a.timer_desde AS timerdesde, 
+                                  a.timer_hasta AS timerhasta, a.plazo_entrega AS plazoentrega, a.precio_antes AS precioantes, 
+                                  a.precio_venta AS precioventa, a.updated_at, (round(random() * 1 + 1) + a.id)::int AS ventas, 
+                                  a.colores, a.sabores, a.medidas'))
+                ->join('empresa as e', 'a.empresa_id', '=', 'e.id')
+                ->join('categorias as c', 'c.id', '=', 'a.categoria_id')
+                ->leftJoin('etiquetas as x', 'x.id', '=', 'a.etiqueta_id')
+                ->where('a.es_activo', true)
+                ->where('e.es_activo', true)
+                ->where('c.activo', true)
+                ->where('a.categoria_id', $categoria->id)
+                ->orderByDesc('c.orden')
+                ->limit(6)
+                ->get();
+
+            // Si no hay artículos para la categoría principal, buscar en las subcategorías
+            if ($articulos->isEmpty()) {
+                // Buscar subcategorías de la categoría principal
+                $subcategorias = DB::table('categorias')
+                    ->select('id')
+                    ->where('padre', $categoria->id)
+                    ->get();
+
+                $subcategoriaIds = $subcategorias->pluck('id');
+
+                if ($subcategoriaIds->isNotEmpty()) {
+                    // Buscar los 6 artículos de las subcategorías
+                    $articulosSubcategorias = DB::table('articulos as a')
+                        ->select(DB::raw('a.id, a.categoria_id AS categoriaid, a.empresa_id AS empresaid, a.etiqueta_id AS etiquetaid, 
+                                          INITCAP(a.name) AS name, INITCAP(c.name) AS categoria, INITCAP(e.name) AS empresa, 
+                                          x.path AS etiqueta, a.descripcion, a.presentacion, a.name_co AS nameco, 
+                                          a.descripcion_co AS descripcionco, a.valoracion, a.observaciones, 
+                                          a.observaciones_co AS observacionesco, a.existencia, a.es_combo AS escombo, a.por_gramo, 
+                                          a.unidad_de_medida AS unidadmedida, a.timer_precio AS timerprecio, a.timer_desde AS timerdesde, 
+                                          a.timer_hasta AS timerhasta, a.plazo_entrega AS plazoentrega, a.precio_antes AS precioantes, 
+                                          a.precio_venta AS precioventa, a.updated_at, (round(random() * 1 + 1) + a.id)::int AS ventas, 
+                                          a.colores, a.sabores, a.medidas'))
+                        ->join('empresa as e', 'a.empresa_id', '=', 'e.id')
+                        ->join('categorias as c', 'c.id', '=', 'a.categoria_id')
+                        ->leftJoin('etiquetas as x', 'x.id', '=', 'a.etiqueta_id')
+                        ->where('a.es_activo', true)
+                        ->where('e.es_activo', true)
+                        ->where('c.activo', true)
+                        ->whereIn('a.categoria_id', $subcategoriaIds)
+                        ->orderByDesc('c.orden')
+                        ->limit(6)
+                        ->get();
+
+                    foreach ($articulosSubcategorias as $articulo) {
+                        // Obtener imágenes del artículo
+                        $categoria->articulo_imagen[ $articulo->id] = DB::table('articulo_imagenes')
+                            ->select(DB::raw('id, articulo_id as articuloId, path as name, orden, updated_at'))
+                            ->where('articulo_id', $articulo->id)
+                            ->orderBy('orden')
+                            ->limit(1)
+                            ->get();
+                    }
+
+                    $categoria->articulos = $articulosSubcategorias;
+                }
+            } else {
+                $categoria->articulos = $articulos;
+            }
+
+            $datosFinales[] = $categoria;
+        }
+       
+        return response()->json($datosFinales);
+    } catch (\Throwable $th) {
+        Log::error("Error en get6Categorias: " . $th->getMessage());
+        return response()->json($rta);
+    }
+}
+    
+
+    
+
+
 
     public function getBanners()
     {
@@ -815,6 +931,7 @@ class ApiController extends Controller
                         plazo_entrega as plazoentrega,
                         precio_antes as precioantes,
                         precio_venta as precioventa,
+                        a.updated_at,
                         (round(random() * 1 + 1) + a.id)::int as ventas,
                         colores, sabores, medidas
                     from articulos a
@@ -849,7 +966,7 @@ class ApiController extends Controller
         $rta['cod'] = 0;
         $rta['reg'] = 0;
         $rta['msg'] = 'OK';
-        $query = " select id, articulo_id as articuloId, path as name, orden from articulo_imagenes order by orden ";
+        $query = " select id, articulo_id as articuloId, path as name, orden,updated_at from articulo_imagenes order by orden ";
         $rta = UtilidadesController::getQuery($query);
         return response()->json($rta);
     }
