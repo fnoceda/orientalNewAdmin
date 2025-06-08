@@ -23,7 +23,8 @@ class ApiController extends Controller
         $rta['cod'] = 0;
         $rta['reg'] = 0;
         $query = "select id, name,updated_at  from ciudades order by name";
-        $data = DB::select(DB::raw($query));
+        // $data = DB::select(DB::raw($query));
+         $data = UtilidadesController::getQuery($query);
         return response()->json($data);
     }
 
@@ -34,7 +35,8 @@ class ApiController extends Controller
         $rta['cod'] = 0;
         $rta['reg'] = 0;
         $query = "select id, ciudad_id, name,updated_at  from barrios order by 1";
-        $data = DB::select(DB::raw($query));
+        // $data = DB::select(DB::raw($query));
+         $data = UtilidadesController::getQuery($query);
         return response()->json($data);
     }
 
@@ -662,11 +664,14 @@ class ApiController extends Controller
 
         try {
             if (empty($parametros)) {
-                $data = DB::select(DB::raw($query));
+                // $data = DB::select(DB::raw($query));
+                 $data = UtilidadesController::getQuery($query);
             } else {
                 //Log::info('hay parametros');
                 foreach ($parametros as $key => $val) {Log::info($key . '=>' . $val);}
-                $data = DB::select(DB::raw($query), $parametros);
+                // $data = DB::select(DB::raw($query), $parametros);
+                $data = DB::select(($query), $parametros);
+                
                 Log::info(DB::getQueryLog());
             }
             //Log::info(DB::getQueryLog());
@@ -744,7 +749,8 @@ class ApiController extends Controller
         $rta['reg'] = 0;
         $query = " select c.id, c.name, c.name_co as nameco, c.padre, i.path as icono
                     from categorias c left join iconos i on c.icono_id = i.id where padre = " . $id . " order by 2 ";
-        $data = DB::select(DB::raw($query));
+        // $data = DB::select(DB::raw($query));
+        $data = DB::select(($query));
         foreach ($data as $key => $val) {
             $data[$key]->hijos = self::getCategoriasHijos($val->id);
         }
@@ -1237,7 +1243,8 @@ class ApiController extends Controller
         try {
             foreach ($articulos as $arti) {
                 $query = 'select stock_descontar(:id , :cantidad) ';
-                DB::select(DB::raw($query), array('id' => $arti['producto'], 'cantidad' => $arti['cantidad']));
+                // DB::select(DB::raw($query), array('id' => $arti['producto'], 'cantidad' => $arti['cantidad']));
+                DB::select(($query), array('id' => $arti['producto'], 'cantidad' => $arti['cantidad']));
                 Log::info(DB::getQueryLog());
 
             }

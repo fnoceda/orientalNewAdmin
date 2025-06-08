@@ -232,7 +232,8 @@ class UsersController extends Controller
                                 $query = "
                                 select id from users where email=:email and id=:id limit 1
                                 ";
-                                $data = DB::select(DB::raw($query), array('id' =>$r->id_usuario,'email' =>Auth::user()->email));
+                                // $data = DB::select(DB::raw($query), array('id' =>$r->id_usuario,'email' =>Auth::user()->email));
+                                $data = DB::select(($query), array('id' =>$r->id_usuario,'email' =>Auth::user()->email));
                                 DB::table('users')
                                 ->where('id', '=', $data[0]->id)
                                 ->update([
