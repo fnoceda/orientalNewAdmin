@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class User extends Authenticatable
 {
@@ -61,7 +62,12 @@ class User extends Authenticatable
      */
     public function setPasswordAttribute($value)
     {
-        $this->attributes['password'] = Hash::make($value);
+         Log::info("SE EJECUTÓ setPasswordAttribute", [
+            'user_id' => $this->id ?? null,
+            'nuevo_valor' => $value,
+            'trace' => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 10),
+        ]);
+        // $this->attributes['password'] = Hash::make($value);
         // $this->attributes['password'] = bcrypt($value);
     }
 
