@@ -104,6 +104,7 @@ class UtilidadesController extends Controller{
             $rta['dat'] = NULL;
             Log::error($rta['msg'].' => '.$e->getMessage());
         }catch(Throwable $e){
+            Log::error($e->getMessage());
             $rta['cod'] = 500;
             $rta['msg'] = 'Ocurrio un error fatal al conectar a la base de datos';
             $rta['reg'] = 0;
