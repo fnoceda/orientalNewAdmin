@@ -1056,7 +1056,8 @@ class ApiController extends Controller
                 ->to(env('MAIL_TO'), 'market.orientalpy@gmail.com')
                 // ->to(env('MAIL_TO'))
                 ->subject('OrientalPY - Nueva venta concretada: '.$razon)
-                ->setBody($html, 'text/html');
+                // ->setBody($html, 'text/html');
+                ->html($html);
         });
 
         if(count(Mail::failures()) > 0){
@@ -1087,7 +1088,8 @@ class ApiController extends Controller
                 ->from($correo, 'OrientalPy')
                 ->to($to->email ?? '')
                 ->subject('OrientalPY - Nueva venta concretada: '.$razon)
-                ->setBody($html, 'text/html');
+                // ->setBody($html, 'text/html');
+                ->html($html);
         });
 
         if(count(Mail::failures()) > 0){
