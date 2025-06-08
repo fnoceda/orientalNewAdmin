@@ -24,7 +24,8 @@ class ApiController extends Controller
         $rta['reg'] = 0;
         $query = "select id, name,updated_at  from ciudades order by name";
         // $data = DB::select(DB::raw($query));
-         $data = UtilidadesController::getQuery($query);
+        $data = DB::select(($query));
+        //  $data = UtilidadesController::getQuery($query);
         return response()->json($data);
     }
 
@@ -36,7 +37,7 @@ class ApiController extends Controller
         $rta['reg'] = 0;
         $query = "select id, ciudad_id, name,updated_at  from barrios order by 1";
         // $data = DB::select(DB::raw($query));
-         $data = UtilidadesController::getQuery($query);
+        $data = DB::select(($query));
         return response()->json($data);
     }
 
@@ -665,7 +666,8 @@ class ApiController extends Controller
         try {
             if (empty($parametros)) {
                 // $data = DB::select(DB::raw($query));
-                 $data = UtilidadesController::getQuery($query);
+                $data = DB::select(($query));
+                //  $data = UtilidadesController::getQuery($query);
             } else {
                 //Log::info('hay parametros');
                 foreach ($parametros as $key => $val) {Log::info($key . '=>' . $val);}
