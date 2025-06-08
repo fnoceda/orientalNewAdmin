@@ -78,41 +78,54 @@ class UtilidadesController extends Controller{
         }
         return $str;
     }
-
     public static function getQuery($query, $parametros = NULL){
-        //esta funcion procesa las consultas del tipo RAW a la base de datos,
-        //retorna un array de objetos
-        DB::enableQueryLog(); //Log::info(__FILE__.'/'.__FUNCTION__);
+        // Esta función procesa las consultas del tipo RAW a la base de datos,
+        // Retorna un array de objetos
+        DB::enableQueryLog(); // Log::info(__FILE__.'/'.__FUNCTION__);
 
-        try{
-            if(empty($parametros)){
-                $data = DB::select( DB::raw($query));
-                if(!env('APP_DEBUG')) { Log::info($query); }
-            }else{
-                if(!env('APP_DEBUG')) { Log::info($query); foreach($parametros as $key=>$val){ Log::info($key.'=>'.$val); }}
-                $data = DB::select( DB::raw($query));
-                $data = DB::select( DB::raw($query), $parametros );
+        try {
+            // Validar que el query sea un string
+            if (!is_string($query)) {
+                throw new \Exception('El parámetro $query debe ser una cadena SQL válida.');
             }
+
+            if (empty($parametros)) {
+                $data = DB::select(DB::raw($query));
+                if (!env('APP_DEBUG')) {
+                    Log::info($query);
+                }
+            } else {
+                if (!env('APP_DEBUG')) {
+                    Log::info($query);
+                    foreach ($parametros as $key => $val) {
+                        Log::info($key . ' => ' . $val);
+                    }
+                }
+                $data = DB::select(DB::raw($query), $parametros); // ✅ solo una ejecución
+            }
+
             $rta['cod'] = 200;
             $rta['msg'] = 'OK';
             $rta['reg'] = count($data);
             $rta['dat'] = $data;
-        } catch(\Illuminate\Database\QueryException $e){
+
+        } catch(\Illuminate\Database\QueryException $e) {
             $rta['cod'] = 500;
-            $rta['msg'] = 'Ocurrio un error al realizar la consulta';
+            $rta['msg'] = 'Ocurrió un error al realizar la consulta';
             $rta['reg'] = 0;
             $rta['dat'] = NULL;
             Log::error($rta['msg'].' => '.$e->getMessage());
-        }catch(Throwable $e){
-            Log::error($e->getMessage());
+
+        } catch (\Throwable $e) {
             $rta['cod'] = 500;
-            $rta['msg'] = 'Ocurrio un error fatal al conectar a la base de datos';
+            $rta['msg'] = 'Ocurrió un error fatal al conectar a la base de datos';
             $rta['reg'] = 0;
             $rta['dat'] = NULL;
             Log::error($rta['msg'].' => '.$e->getMessage());
-        }catch (Exception $e) {
+
+        } catch (\Exception $e) {
             $rta['cod'] = 500;
-            $rta['msg'] = 'Ocurrio un error al conectar a la base de datos';
+            $rta['msg'] = 'Ocurrió un error al conectar a la base de datos';
             $rta['reg'] = 0;
             $rta['dat'] = NULL;
             Log::error($rta['msg'].' => '.$e->getMessage());
@@ -120,6 +133,48 @@ class UtilidadesController extends Controller{
 
         return $rta;
     }
+
+    // public static function getQuery($query, $parametros = NULL){
+    //     //esta funcion procesa las consultas del tipo RAW a la base de datos,
+    //     //retorna un array de objetos
+    //     DB::enableQueryLog(); //Log::info(__FILE__.'/'.__FUNCTION__);
+
+    //     try{
+    //         if(empty($parametros)){
+    //             $data = DB::select( DB::raw($query));
+    //             if(!env('APP_DEBUG')) { Log::info($query); }
+    //         }else{
+    //             if(!env('APP_DEBUG')) { Log::info($query); foreach($parametros as $key=>$val){ Log::info($key.'=>'.$val); }}
+    //             $data = DB::select( DB::raw($query));
+    //             $data = DB::select( DB::raw($query), $parametros );
+    //         }
+    //         $rta['cod'] = 200;
+    //         $rta['msg'] = 'OK';
+    //         $rta['reg'] = count($data);
+    //         $rta['dat'] = $data;
+    //     } catch(\Illuminate\Database\QueryException $e){
+    //         $rta['cod'] = 500;
+    //         $rta['msg'] = 'Ocurrio un error al realizar la consulta';
+    //         $rta['reg'] = 0;
+    //         $rta['dat'] = NULL;
+    //         Log::error($rta['msg'].' => '.$e->getMessage());
+    //     }catch(Throwable $e){
+    //         Log::error($e->getMessage());
+    //         $rta['cod'] = 500;
+    //         $rta['msg'] = 'Ocurrio un error fatal al conectar a la base de datos';
+    //         $rta['reg'] = 0;
+    //         $rta['dat'] = NULL;
+    //         Log::error($rta['msg'].' => '.$e->getMessage());
+    //     }catch (Exception $e) {
+    //         $rta['cod'] = 500;
+    //         $rta['msg'] = 'Ocurrio un error al conectar a la base de datos';
+    //         $rta['reg'] = 0;
+    //         $rta['dat'] = NULL;
+    //         Log::error($rta['msg'].' => '.$e->getMessage());
+    //     }
+
+    //     return $rta;
+    // }
 
     public static function getFirst($query, $parametros = NULL){
         //esta funcion retorna un bojeto solo con el primer registro
