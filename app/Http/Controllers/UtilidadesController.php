@@ -82,7 +82,6 @@ class UtilidadesController extends Controller{
         // Esta función procesa las consultas del tipo RAW a la base de datos,
         // Retorna un array de objetos
         DB::enableQueryLog(); // Log::info(__FILE__.'/'.__FUNCTION__);
-
         try {
             // Validar que el query sea un string
             if (!is_string($query)) {
@@ -90,7 +89,7 @@ class UtilidadesController extends Controller{
             }
 
             if (empty($parametros)) {
-                $data = DB::select(DB::raw($query));
+                $data = DB::select(($query));
                 if (!env('APP_DEBUG')) {
                     Log::info($query);
                 }
@@ -101,7 +100,8 @@ class UtilidadesController extends Controller{
                         Log::info($key . ' => ' . $val);
                     }
                 }
-                $data = DB::select(DB::raw($query), $parametros); // ✅ solo una ejecución
+                // $data = DB::select(DB::raw($query), $parametros); // ✅ solo una ejecución
+                $data = DB::select($query, $parametros); // usa el string directamente
             }
 
             $rta['cod'] = 200;
