@@ -1039,12 +1039,16 @@ class ApiController extends Controller
     }
 
     private static function notificarVenta($venta, $importe){
+        
         $envio = false;
+        try {
+            //code...
+        
         $correo = 'contacto.corpar@gmail.com';
         $razon = $venta->ruc .' '.$venta->razon_social;
         $html = '';
         $html .= 'Hola <br />';
-        $html .= 'Te notificamos una nueva venta concretada desde la app OrietnalPy por parte de '.$razon.' por valor de '.$importe.'<br />';
+        $html .= 'Te notificamos una nueva venta concretada desde la app OrietalPy por parte de '.$razon.' por valor de '.$importe.'<br />';
         $html .= 'La modalida de de la venta es '.$venta->modo.' la fecha y hora de entrega solicitada es: '.$venta->entrega_programada.'<br />';
         $html .= 'Por favor ingresa a la web para gestionar el pedido '."<a href='https://oriental.soluciones.dev/login'>Click Aqui</a><br />";
         $html .= 'Que tengas buen resto de jornada<br /><br /><br />';
@@ -1060,18 +1064,23 @@ class ApiController extends Controller
                 ->html($html);
         });
 
-        if(count(Mail::failures()) > 0){
-            $envio = false;
-            Log::error('Ocurrio un error al intentar enviar el correo');
-        }else{
+        
             $envio = true;
             Log::info('Fin del proceso, se envio correo al usuario con su nueva clave exitosamente!');
-        }
+        
+    } catch (\Throwable $th) {
+        //throw $th;
+        $envio = false;
+        Log::error('Ocurrio un error al intentar enviar el correo'.$th->getMessage());
+       }
 
         return $envio;
     }
     private static function notificarCompra($venta, $importe){
 
+        $envio = false;
+        try {
+               
         $to=DB::table('users')->where('id',$venta->cliente_id)->first();
         $envio = false;
         $correo = 'contacto.corpar@gmail.com';
@@ -1092,13 +1101,14 @@ class ApiController extends Controller
                 ->html($html);
         });
 
-        if(count(Mail::failures()) > 0){
-            $envio = false;
-            Log::error('Ocurrio un error al intentar enviar el correo');
-        }else{
-            $envio = true;
-            Log::info('Fin del proceso, se envio correo al usuario con su nueva clave exitosamente!');
-        }
+       
+        $envio = true;
+        Log::info('Fin del proceso, se envio correo al usuario con su nueva clave exitosamente!');
+        
+    } catch (\Throwable $th) {
+        $envio = false;
+        Log::error('Ocurrio un error al intentar enviar el correo'.$th->getMessage());
+    }
 
         return $envio;
     }
