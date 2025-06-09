@@ -67,7 +67,9 @@ class User extends Authenticatable
             'nuevo_valor' => $value,
             'trace' => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 10),
         ]);
-        // $this->attributes['password'] = Hash::make($value);
+        if (!empty($value)) {
+            $this->attributes['password'] = Hash::make($value);
+        }
         // $this->attributes['password'] = bcrypt($value);
     }
 
