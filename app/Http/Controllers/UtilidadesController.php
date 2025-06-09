@@ -183,10 +183,12 @@ class UtilidadesController extends Controller{
 
         try{
             if(empty($parametros)){
-                $data = DB::select( DB::raw($query));
+                // $data = DB::select( DB::raw($query));
+                $data = DB::select( ($query));
             }else{
                 // Log::info('hay parametros'); foreach($parametros as $key=>$val){ Log::info($key.'=>'.$val); }
-                $data = DB::select( DB::raw($query), $parametros );
+                // $data = DB::select( DB::raw($query), $parametros );
+                $data = DB::select( ($query), $parametros );
             }
             Log::info(DB::getQueryLog());
             $rta['cod'] = 1;
