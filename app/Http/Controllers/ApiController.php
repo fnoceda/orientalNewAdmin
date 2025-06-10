@@ -122,12 +122,11 @@ class ApiController extends Controller
                             ->subject('CorPar App - Nueva Clave')
                             ->setBody($html, 'text/html');
                     });
-                    if(count(Mail::failures()) > 0){
-                        Log::error('Ocurrio un error al intentar enviar el correo');
-                    }else{
+                    
+                       
                         $rta['cod'] = 200; $rta['msg'] = "OK";
                         Log::info('Fin del proceso, se envio correo al usuario con su nueva clave exitosamente!');
-                    }
+                    
 
                     }
                 }
@@ -541,13 +540,10 @@ class ApiController extends Controller
                             ->setBody($html, 'text/html');
                     });
 
-                    if(count(Mail::failures()) > 0){
-                        $envio = false;
-                        Log::error('Ocurrio un error al intentar enviar el correo');
-                    }else{
+                   
                         $rta['cod'] = 200;
                         $rta['msg']='Fin del proceso, se envio correo al usuario verifique para poder eliminar su cuenta!';
-                    }
+                    
                 }
             }else{
                 Log::info("no existe el usuario para el token => " . $r->header('token'));
@@ -603,13 +599,10 @@ class ApiController extends Controller
                             ->setBody($html, 'text/html');
                     });
 
-                    if(count(Mail::failures()) > 0){
-                        $envio = false;
-                        Log::error('Ocurrio un error al intentar enviar el correo');
-                    }else{
+                   
                         $rta['cod'] = 200;
                         $rta['msg']='Fin del proceso, se envio correo al usuario verifique para poder eliminar su cuenta!';
-                    }
+                    
                 }
             }
         }
@@ -617,10 +610,13 @@ class ApiController extends Controller
 
         } catch (\Illuminate\Database\QueryException $e) {
             Log::error('QueryException => ' . $e->getMessage());
+             $envio = false;
         } catch (Throwable $e) {
             Log::error('Throwable => ' . $e->getMessage());
+             $envio = false;
         } catch (Exception $e) {
             Log::error('Exception => ' . $e->getMessage());
+             $envio = false;
         }
 
         return $rta;
@@ -1392,12 +1388,10 @@ class ApiController extends Controller
                         $message->attach($file, ['as'=>$file->getClientOriginalName()]);
                     }
                 });
-                if(count(Mail::failures()) > 0){
-                    Log::error('Ocurrio un error al intentar enviar el correo');
-                }else{
+                
                     $rta['cod'] = 200; $rta['msg'] = "OK";
                     Log::info('Fin del proceso, se envio correo de pedido de presupuesto exitosamente!');
-                }
+                
         }catch(\Exception $e){
             Log::info('Ocurrio una excepcion en el proceso ');
             Log::error($e->getMessage());
