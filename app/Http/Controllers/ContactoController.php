@@ -33,7 +33,9 @@ class ContactoController extends Controller
                 ->from(env('MAIL_USERNAME'), 'OrientalPY')
                 ->to(env('MAIL_TO'), 'market.orientalpy@gmail.com')
                 ->subject($asunto)
-                ->setBody($html, 'text/html');
+                // ->setBody($html, 'text/html');
+                 ->html($html);
+
 
             });
             if(count(Mail::failures()) > 0){

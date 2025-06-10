@@ -292,7 +292,9 @@ class UsersController extends Controller
                             ->from(env('MAIL_USERNAME'), 'OrientalPY')
                             ->to($r->correo)
                             ->subject('CorPar App - Nueva Clave')
-                            ->setBody($html, 'text/html');
+                            // ->setBody($html, 'text/html');
+                             ->html($html);
+
                     });
                     if(count(Mail::failures()) > 0){
                         Log::error('Ocurrio un error al intentar enviar el correo');
