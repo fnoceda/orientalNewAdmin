@@ -120,7 +120,8 @@ class ApiController extends Controller
                             ->from(env('MAIL_USERNAME'), 'OrientalPY')
                             ->to($r->correo)
                             ->subject('CorPar App - Nueva Clave')
-                            ->setBody($html, 'text/html');
+                            // ->setBody($html, 'text/html');
+                              ->html($html);
                     });
                     
                        
@@ -537,7 +538,8 @@ class ApiController extends Controller
                             ->to($user->email )
                             // ->to('alandiaz719@gmail.com')
                             ->subject('OrientalPY - petición de baja: ')
-                            ->setBody($html, 'text/html');
+                            // ->setBody($html, 'text/html');
+                              ->html($html);
                     });
 
                    
@@ -596,7 +598,9 @@ class ApiController extends Controller
                             ->to($user->email )
                             // ->to('alandiaz719@gmail.com')
                             ->subject('OrientalPY - petición de baja: ')
-                            ->setBody($html, 'text/html');
+                            // ->setBody($html, 'text/html');
+                              ->html($html);
+
                     });
 
                    
@@ -1382,7 +1386,8 @@ class ApiController extends Controller
                     ->to(env('MAIL_TO'), 'market.orientalpy@gmail.com')
                     ->replyTo($userMail)
                     ->subject('OrientalPYApp - Pedido de Presupuesto de: '.$userName.' producto: '.$producto)
-                    ->setBody($html, 'text/html');
+                    // ->setBody($html, 'text/html');
+                      ->html($html);
                     if(!empty($file)){
                         Log::info('Adjuntando Archivo'); //kaka
                         $message->attach($file, ['as'=>$file->getClientOriginalName()]);
