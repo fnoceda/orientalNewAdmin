@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\ApiController;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -56,4 +58,8 @@ Route::get('/compras/historial/articulos/', 'ApiController@comprasHistorial');
 Route::get('/articulos/imagen/descripcion/{articulo}', 'ApiController@articuloImagenDescripcion');
 Route::get('/delivery/coste', 'ApiController@deliveryCoste');
 Route::get('/tags/articulos/{articulo}', 'ApiController@tagsArticulos');
+
+//añadimos la seecion de post para comprar la session
+Route::post('/session/compare', 'ApiController@compare');
+
 

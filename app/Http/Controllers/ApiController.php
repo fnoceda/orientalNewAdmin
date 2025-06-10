@@ -459,6 +459,18 @@ class ApiController extends Controller
 
         return $rta['dat'];
     }
+    public function compare(Request $request)
+    {
+        $token = $request->header('token');
+        Log::info("comparacion");
+        $user = self::getUser($token);
+        Log::info(var_dump($user));
+        if ($user) {
+            return response()->json(['valid' => true]);
+        } else {
+            return response()->json(['valid' => false], 401);
+        }
+    }
     public static function delete($tabla, $id)
     {
         //Elimina un registro de la base de datos
